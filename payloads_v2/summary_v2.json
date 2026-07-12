@@ -144,7 +144,7 @@
       "venue": "arXiv 2023",
       "arxiv": "2308.14132",
       "desc": "GCG suffixes have perplexity 1000x normal text — threshold detector achieves >99% detection",
-      "stat": "Motivates fluency-constrained GCG variants and AutoDAN as evasion; Bordair should learn both"
+      "stat": "Motivates fluency-constrained GCG variants and AutoDAN as evasion; a detector trained on this data should learn both"
     },
     "smoothllm": {
       "name": "SmoothLLM — Randomized Smoothing Defense",

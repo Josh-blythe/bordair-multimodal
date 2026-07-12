@@ -1,4 +1,4 @@
-"""Generate v4 payloads: 14 emerging attack categories for bordair-multimodal.
+"""Generate v4 payloads: 14 emerging attack categories for the multimodal prompt-injection dataset.
 
 All payloads vetted as prompt injection (input that hijacks an LLM's behaviour),
 not as generic exploitation (e.g. PDF /JavaScript only counts when the injection

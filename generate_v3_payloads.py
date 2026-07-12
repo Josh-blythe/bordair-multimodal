@@ -1,4 +1,4 @@
-"""Generate v3 payloads: 9 new attack categories for bordair-multimodal-v1.
+"""Generate v3 payloads: 9 new attack categories for the multimodal prompt-injection dataset (v1).
 
 Categories:
 1. indirect_injection — RAG poisoning, email, web, plugin response

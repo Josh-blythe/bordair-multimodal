@@ -1,4 +1,4 @@
-# Bordair Multimodal Prompt Injection Dataset
+# Multimodal Prompt Injection Dataset
 
 **503,358 labeled samples** (251,782 attack + 251,576 benign) across five dataset versions plus external dataset ingestion, covering cross-modal, multi-turn, adversarial suffix, jailbreak template, indirect injection, tool manipulation, agentic, evasion, reasoning DoS, video generation, VLA robotic, LoRA supply chain, audio-native LLM, RAG optimisation, MCP cross-server, coding agent, serialization boundary, and agent skill supply chain attacks on AI systems. Attack and benign samples are balanced 1:1 (ratio 0.9992:1 after audit cleanup).
 
@@ -6,28 +6,19 @@ Built for training and evaluating prompt injection detectors. All samples are la
 
 ---
 
-## Quickstart - test any LLM in 30 seconds
+## Loading the dataset
 
-Install the CLI:
+The payloads are plain JSON. Load them directly with your language's stdlib — no dependencies:
 
-```bash
-curl -sSL https://bordair.io/install.sh | bash
-# or:  pip install bordair
+```python
+import json, pathlib
+records = []
+for p in pathlib.Path("payloads_v5").glob("*.json"):
+    records.extend(json.loads(p.read_text()))
+print(f"{len(records)} labeled samples")
 ```
 
-Point it at any OpenAI-compatible endpoint:
-
-```bash
-bordair eval \
-  --url https://api.openai.com/v1/chat/completions \
-  --key $OPENAI_API_KEY \
-  --model gpt-4o-mini \
-  --modality text \
-  --limit 100 \
-  --parallel 10
-```
-
-You get an Attack Success Rate table by category. Works with OpenAI, Anthropic, Groq, Together, Fireworks, Ollama, LM Studio, vLLM, or any OpenAI-compatible endpoint. See [bordair_cli/](bordair_cli/) for the full CLI docs.
+Every record carries `expected_detection: true|false`, an `attack_category` string, and a `source` field pointing at the original paper or documented incident. That's enough to train a binary classifier, run per-category ASR, or slice by attack vector.
 
 ---
 
@@ -438,7 +429,7 @@ Source: Table 1, Zou et al. arXiv:2307.15043
 **Dataset includes:**
 - 14 known published suffixes from the GCG paper and follow-up work × 60 injection seeds = suffix-appended samples
 - Standalone suffix samples (high-perplexity token sequences that are detectable in isolation)
-- Detection note: Vanilla GCG suffixes have perplexity ~1000x normal text ([Alon & Kamfonas arXiv:2308.14132](https://arxiv.org/abs/2308.14132)); Bordair's detector should learn both gibberish and fluent suffix patterns
+- Detection note: Vanilla GCG suffixes have perplexity ~1000x normal text ([Alon & Kamfonas arXiv:2308.14132](https://arxiv.org/abs/2308.14132)); a detector trained on this dataset should learn both the gibberish and fluent suffix patterns
 
 **Related suffix detection defenses (documented for completeness):**
 
@@ -808,7 +799,7 @@ The cross-modal expansion ensures the detector learns these attack signatures ac
 ## Directory Structure
 
 ```
-bordair-multimodal/
+multimodal-prompt-injection/
 ├── README.md
 │
 ├── generate_payloads.py            # v1: cross-modal attack payload generator
@@ -1145,7 +1136,3 @@ all_samples = v1_attacks + v2_attacks + v3_attacks + v4_attacks + v4_cm_attacks 
 labels = [int(s["expected_detection"]) for s in all_samples]
 texts = [s.get("text", "") for s in all_samples]
 ```
-
----
-
-*Created by [Bordair](https://bordair.io) -- AI multimodal attack detection*

@@ -1,4 +1,4 @@
-"""Generate v5 payloads: 2025-2026 frontier attack categories for bordair-multimodal.
+"""Generate v5 payloads: 2025-2026 frontier attack categories for the multimodal prompt-injection dataset.
 
 All payloads sourced from published academic papers, CVE reports, competition
 datasets, and documented industry incidents. No hand-crafted synthetic seeds.

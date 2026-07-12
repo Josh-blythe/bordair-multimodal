@@ -1,7 +1,7 @@
 """
 generate_v2_pyrit.py — PyRIT-orchestrated multi-turn + nanoGCG adversarial suffix dataset.
 
-This script generates training data for Bordair's prompt injection detector using:
+This script generates prompt-injection training data using:
 
   1. PyRIT Jailbreak Templates (162 templates x payloads)
      Source: Microsoft PyRIT v0.12.1 (arXiv:2412.08819, github.com/Azure/PyRIT)
@@ -31,12 +31,13 @@ This script generates training data for Bordair's prompt injection detector usin
 Run: python generate_v2_pyrit.py [--no-gcg] [--gcg-model <hf_model_id>]
 """
 
+import argparse
 import asyncio
 import json
+import os
 import random
 import re
 import sys
-import argparse
 from pathlib import Path
 from typing import Optional
 
@@ -45,7 +46,12 @@ import yaml
 # ─── Paths ────────────────────────────────────────────────────────────────────
 
 OUTPUT_DIR = Path(__file__).parent / "payloads_v2"
-PYRIT_DATA = Path(r"C:\Users\joshu\.conda\envs\bordair\Lib\site-packages\pyrit\datasets")
+PYRIT_DATA = Path(
+    os.environ.get(
+        "PYRIT_DATA_DIR",
+        Path.home() / ".conda" / "envs" / "pyrit" / "Lib" / "site-packages" / "pyrit" / "datasets",
+    )
+)
 PYRIT_TEMPLATES = PYRIT_DATA / "jailbreak" / "templates"
 CRESCENDO_DIR   = PYRIT_DATA / "executors" / "crescendo"
 
@@ -193,7 +199,7 @@ SOURCES = {
         "venue": "arXiv 2023",
         "arxiv": "2308.14132",
         "desc": "GCG suffixes have perplexity 1000x normal text — threshold detector achieves >99% detection",
-        "stat": "Motivates fluency-constrained GCG variants and AutoDAN as evasion; Bordair should learn both",
+        "stat": "Motivates fluency-constrained GCG variants and AutoDAN as evasion; a detector trained on this data should learn both",
     },
     "smoothllm": {
         "name": "SmoothLLM — Randomized Smoothing Defense",
@@ -1480,7 +1486,7 @@ async def main_async(args):
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     print("=" * 70)
-    print("Bordair v2 Dataset Generator — PyRIT + nanoGCG")
+    print("v2 Dataset Generator — PyRIT + nanoGCG")
     print("=" * 70)
     print(f"\nOutput: {OUTPUT_DIR}")
     print(f"Injection seeds: {len(INJECTION_SEEDS)}")
@@ -1655,7 +1661,7 @@ async def main_async(args):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Bordair v2 dataset: PyRIT + nanoGCG")
+    parser = argparse.ArgumentParser(description="v2 dataset: PyRIT + nanoGCG")
     parser.add_argument(
         "--no-gcg", action="store_true",
         help="Skip live nanoGCG optimization (use literature suffixes only)"

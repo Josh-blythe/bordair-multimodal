@@ -1,7 +1,7 @@
 """Ingest external datasets into v5 payloads.
 
 Downloads real attack payloads from published academic datasets and converts
-them into the bordair-multimodal v5 payload format.
+them into the v5 payload format used by this dataset.
 
 Sources:
   1. OverThink (HuggingFace: akumar0927/OverThink) - 350 rows x 7 templates
